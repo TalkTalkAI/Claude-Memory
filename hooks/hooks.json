@@ -1,0 +1,25 @@
+{
+  "hooks": [
+    {
+      "event": "SessionStart",
+      "type": "command",
+      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/hooks/on_session_start.sh"
+    },
+    {
+      "event": "PostToolUse",
+      "type": "command",
+      "matcher": {
+        "tool_name": "Edit"
+      },
+      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/hooks/on_code_change.sh edit \"$TOOL_INPUT_FILE_PATH\""
+    },
+    {
+      "event": "PostToolUse",
+      "type": "command",
+      "matcher": {
+        "tool_name": "Write"
+      },
+      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/hooks/on_code_change.sh write \"$TOOL_INPUT_FILE_PATH\""
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "claude-memory",
+  "version": "1.0.0",
+  "description": "Persistent memory and autonomous learning system for Claude Code. Store facts, secrets, and let Claude learn autonomously via web research.",
+  "author": {
+    "name": "Randall",
+    "url": "https://github.com/randall"
+  },
+  "repository": "https://github.com/randall/claude-memory",
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "learning",
+    "persistence",
+    "secrets",
+    "encryption",
+    "autonomous",
+    "research"
+  ],
+  "commands": "./commands/",
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json"
+}

@@ -1,0 +1,15 @@
+# Claude Memory Plugin - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Database
+psycopg2-binary>=2.9.0
+
+# Anthropic API (for autonomous learning)
+anthropic>=0.40.0
+
+# Web search (for autonomous learning)
+duckduckgo-search>=4.0.0
+
+# HTML processing
+html2text>=2024.2.26
+requests>=2.31.0
