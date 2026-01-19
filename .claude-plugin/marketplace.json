@@ -1,12 +1,27 @@
 {
   "name": "claude-memory-marketplace",
-  "description": "Claude Memory Plugin Marketplace",
+  "owner": {
+    "name": "TalkTalkAI",
+    "email": "randall@myamy.app"
+  },
+  "metadata": {
+    "description": "Claude Memory Plugin - Persistent memory and autonomous learning",
+    "version": "1.0.0"
+  },
   "plugins": [
     {
       "name": "claude-memory",
-      "version": "1.0.0",
+      "source": "./",
       "description": "Persistent memory and autonomous learning system for Claude Code",
-      "path": ".."
+      "version": "1.0.0",
+      "author": {
+        "name": "TalkTalkAI"
+      },
+      "repository": "https://github.com/TalkTalkAI/Claude-Memory",
+      "license": "MIT",
+      "keywords": ["memory", "learning", "persistence", "secrets", "encryption"],
+      "commands": "./commands/",
+      "hooks": "./hooks/hooks.json"
     }
   ]
 }
