@@ -24,8 +24,8 @@ Give your Claude Code sessions persistent memory across conversations. Store fac
 ### From GitHub
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-memory.git
-claude plugin install ./claude-memory --scope user
+git clone https://github.com/TalkTalkAI/Claude-Memory.git
+claude plugin install ./Claude-Memory --scope user
 ```
 
 ### First-Time Setup
