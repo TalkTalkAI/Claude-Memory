@@ -1,48 +1,44 @@
-# Claude Memory Plugin
+# Claude Memory
 
-Persistent memory and autonomous learning system for Claude Code.
+**Persistent memory and autonomous learning system for Claude Code**
+
+Give your Claude Code sessions persistent memory across conversations. Store facts, decisions, and learnings that survive session restarts. Securely manage API keys and secrets with AES-256 encryption. Enable autonomous learning where Claude researches topics of interest via web search.
 
 ## Features
 
-- **Persistent Memory**: Store facts, decisions, learnings, and preferences across sessions
-- **Encrypted Secrets**: Securely store API keys, passwords, and tokens (AES-256)
-- **Autonomous Learning**: Claude can explore topics of interest via web research
-- **Task Tracking**: Manage tasks that persist across sessions
-- **Code Change Logging**: Automatic tracking of file modifications
+- **Persistent Memory** - Store facts, decisions, preferences, and learnings across sessions
+- **Encrypted Secrets** - Securely store API keys, passwords, and tokens (AES-256 via pgcrypto)
+- **Autonomous Learning** - Claude explores topics via DuckDuckGo search and synthesizes insights
+- **Task Tracking** - Manage tasks that persist across sessions
+- **Code Change Logging** - Automatic tracking of file modifications via hooks
+
+## Requirements
+
+- Docker (for PostgreSQL database)
+- Python 3.10+
+- Claude Code CLI
+- Anthropic API key (for autonomous learning feature)
 
 ## Installation
 
-### From Local Directory
+### From GitHub
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/claude-memory.git
 claude plugin install ./claude-memory --scope user
 ```
 
-### From GitHub (when published)
+### First-Time Setup
 
-```bash
-claude plugin install claude-memory@your-marketplace
-```
-
-## Setup
-
-After installing the plugin, run the setup command:
-
+In Claude Code, run:
 ```
 /claude-memory:setup
 ```
 
-This will:
-1. Create a PostgreSQL database in Docker (port 5433)
-2. Generate an AES-256 encryption key
-3. Initialize all database tables
-4. Configure the system
-
-### Prerequisites
-
-- Docker installed and running
-- Python 3.10+ with pip
-- For autonomous learning: Anthropic API key
+This creates:
+- PostgreSQL database in Docker (port 5433)
+- AES-256 encryption key
+- All database tables
 
 ### Post-Setup
 
@@ -51,121 +47,54 @@ This will:
    /claude-memory:secrets add api_key anthropic "sk-ant-xxx" "For learning"
    ```
 
-2. **Install Python dependencies** (for learning features):
+2. **Install Python dependencies**:
    ```bash
-   pip install anthropic duckduckgo-search html2text requests
+   pip install -r requirements.txt
    ```
 
-3. **Add learning interests**:
-   ```
-   /claude-memory:learn add-interest "FastAPI patterns" "Help with API development" 7
-   ```
-
-## Usage
-
-### Slash Commands
-
-| Command | Description |
-|---------|-------------|
-| `/claude-memory:setup` | First-time installation |
-| `/claude-memory:memory` | Manage memories (add, search, list) |
-| `/claude-memory:secrets` | Manage encrypted secrets |
-| `/claude-memory:learn` | Autonomous learning operations |
-| `/claude-memory:tasks` | Task management |
-
-### Memory Operations
+## Quick Start
 
 ```bash
-# View full context
+# View memory context
 /claude-memory:memory context
 
 # Add a memory
-/claude-memory:memory add "User prefers TypeScript" preference user 8
+/claude-memory:memory add "User prefers TypeScript over JavaScript" preference user 8
 
 # Search memories
-/claude-memory:memory search "database"
+/claude-memory:memory search "TypeScript"
 
-# List recent memories
-/claude-memory:memory list 20
-```
+# Store a secret
+/claude-memory:secrets add api_key openai "sk-xxx" "OpenAI API key"
 
-### Secret Management
-
-```bash
-# Store API key
-/claude-memory:secrets add api_key openai "sk-xxx" "OpenAI key"
-
-# Retrieve secret
-/claude-memory:secrets get api_key openai
-
-# List secrets (names only)
-/claude-memory:secrets list
-```
-
-### Learning System
-
-```bash
-# Add interest
-/claude-memory:learn add-interest "Rust async" "Systems programming" 8
+# Add learning interest
+/claude-memory:learn add-interest "Rust async patterns" "Systems programming" 8
 
 # Run learning session
 /claude-memory:learn run
-
-# View insights
-/claude-memory:learn insights
-
-# View interests
-/claude-memory:learn interests
 ```
 
-### Task Management
+## Commands
 
-```bash
-# Add task
-/claude-memory:tasks add "Implement auth" "Add OAuth2 support" 8
-
-# Update task
-/claude-memory:tasks update 5 completed
-
-# List tasks
-/claude-memory:tasks list
-```
-
-## Data Storage
-
-All data is stored in `~/.claude-memory/`:
-
-```
-~/.claude-memory/
-├── config/
-│   ├── db.env           # Database configuration
-│   └── encryption.key   # AES-256 key (chmod 600)
-├── logs/
-│   └── learning.log     # Learning session logs
-└── docker-compose.yml   # PostgreSQL container config
-```
-
-## Database Tables
-
-| Table | Purpose |
-|-------|---------|
-| memories | Facts, decisions, learnings, preferences |
-| secrets | Encrypted API keys, passwords, tokens |
-| tasks | Ongoing and completed tasks |
-| projects | Known codebases |
-| learning_interests | Topics to explore |
-| research_requests | Queued web searches |
-| learning_insights | Synthesized knowledge |
+| Command | Description |
+|---------|-------------|
+| `/claude-memory:setup` | First-time installation and database setup |
+| `/claude-memory:memory` | Manage memories (add, search, list, context) |
+| `/claude-memory:secrets` | Manage encrypted secrets (add, get, list) |
+| `/claude-memory:learn` | Autonomous learning (interests, run, insights) |
+| `/claude-memory:tasks` | Task management (add, update, list) |
 
 ## Memory Types
 
-- `fact` - Objective information
-- `decision` - Choices made during development
-- `preference` - User preferences
-- `learning` - Insights from research
-- `context` - Session-specific context
-- `todo` - Things to remember
-- `warning` - Important cautions
+| Type | Purpose |
+|------|---------|
+| `fact` | Objective information |
+| `decision` | Choices made during development |
+| `preference` | User preferences |
+| `learning` | Insights from research |
+| `context` | Session-specific context |
+| `todo` | Things to remember |
+| `warning` | Important cautions |
 
 ## Importance Levels
 
@@ -174,23 +103,45 @@ All data is stored in `~/.claude-memory/`:
 - **7-8**: Important (shown in context)
 - **9-10**: Critical (always shown first)
 
-## Scheduled Learning
+## Data Storage
 
-For autonomous learning on a schedule, add to crontab:
+All data stored in `~/.claude-memory/`:
 
+```
+~/.claude-memory/
+├── config/
+│   ├── db.env           # Database configuration
+│   └── encryption.key   # AES-256 key (chmod 600)
+├── logs/
+│   └── learning.log     # Learning session logs
+└── docker-compose.yml   # PostgreSQL container
+```
+
+## Autonomous Learning
+
+The learning system allows Claude to:
+
+1. **Track interests** - Topics you want Claude to learn about
+2. **Research via web** - DuckDuckGo searches with content extraction
+3. **Synthesize insights** - AI-powered reflection on findings
+4. **Build knowledge** - Insights stored as searchable memories
+
+### Scheduled Learning
+
+For automatic learning sessions, add to crontab:
 ```bash
 0 */6 * * * ~/.claude-memory/scripts/claude_learning_cron.py >> ~/.claude-memory/logs/learning.log 2>&1
 ```
 
-## Security Notes
+## Security
 
-1. Encryption key at `~/.claude-memory/config/encryption.key` has chmod 600
-2. All secrets encrypted with AES-256 via pgcrypto
-3. Database stores encrypted blobs - useless without the key
-4. Back up both database AND encryption key separately
-5. Never commit encryption key to version control
+- Encryption key at `~/.claude-memory/config/encryption.key` has chmod 600
+- All secrets encrypted with AES-256 via PostgreSQL pgcrypto
+- Database stores encrypted blobs - useless without the key
+- Back up both database AND encryption key separately
+- Never commit encryption key to version control
 
-## Backup
+## Backup & Restore
 
 ```bash
 # Backup database
@@ -199,7 +150,7 @@ docker exec claude-memory-postgres pg_dump -U claude claude_memory > backup.sql
 # Backup encryption key (store separately!)
 cp ~/.claude-memory/config/encryption.key ~/secure-backup/
 
-# Restore
+# Restore database
 docker exec -i claude-memory-postgres psql -U claude -d claude_memory < backup.sql
 ```
 
@@ -210,16 +161,37 @@ docker exec -i claude-memory-postgres psql -U claude -d claude_memory < backup.s
 cd ~/.claude-memory && docker compose up -d
 ```
 
-### Check status
-```bash
-~/.claude-memory/scripts/memory.sh status
-```
-
-### View logs
+### Check database logs
 ```bash
 docker logs claude-memory-postgres
+```
+
+### Port 5433 in use
+Edit `~/.claude-memory/docker-compose.yml` to use a different port.
+
+### Docker permission denied
+```bash
+sudo usermod -aG docker $USER
+# Log out and back in
+```
+
+## Uninstall
+
+```bash
+# Remove plugin
+claude plugin uninstall claude-memory
+
+# Stop and remove database
+cd ~/.claude-memory && docker compose down -v
+
+# Remove data directory
+rm -rf ~/.claude-memory
 ```
 
 ## License
 
 MIT
+
+## Contributing
+
+Contributions welcome! Please open an issue or submit a pull request.
