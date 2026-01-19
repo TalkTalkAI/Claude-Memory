@@ -1,0 +1,12 @@
+{
+  "name": "claude-memory-marketplace",
+  "description": "Claude Memory Plugin Marketplace",
+  "plugins": [
+    {
+      "name": "claude-memory",
+      "version": "1.0.0",
+      "description": "Persistent memory and autonomous learning system for Claude Code",
+      "path": ".."
+    }
+  ]
+}
